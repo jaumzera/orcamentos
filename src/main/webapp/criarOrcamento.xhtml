@@ -1,0 +1,115 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Orçamentos - criar</title>
+    </h:head>
+    <h:body>
+        <h:form id="form">
+            <h:panelGroup id="buscaPG">
+                <h:outputLabel value="Buscar por " for="buscaIT"/>
+                <h:inputText id="buscaIT" 
+                             value="#{orcamentoMB.busca}"
+                             validator="buscaValidator"/>
+                <h:message for="buscaIT"/>
+                <h:commandButton value="Buscar" action="#{orcamentoMB.buscar}">
+                    <f:ajax execute="buscaPG" render="@form"/>
+                </h:commandButton>
+            </h:panelGroup>
+
+            <h:dataTable id="resultadosDT" 
+                         value="#{orcamentoMB.produtos}"
+                         var="produto">
+                <h:column>
+                    <f:facet name="header">
+                        Produto
+                    </f:facet>
+
+                    <h:outputText value="#{produto.descricao}"/>
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">
+                        Preço
+                    </f:facet>
+
+                    <h:outputText value="#{produto.preco}">
+                        <f:convertNumber type="currency"/>
+                    </h:outputText>
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">
+                        Quantidade
+                    </f:facet>
+
+                    <h:inputText id="quantidadeIT" value="#{orcamentoMB.quantidade}"/>
+                    <h:message for="quantidadeIT"/>
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">
+                        Ações
+                    </f:facet>
+
+                    <h:commandLink value="adicionar" action="#{orcamentoMB.adicionar(produto)}">
+                        <f:ajax execute="quantidadeIT @this"
+                                render="@form"/>
+                    </h:commandLink>
+                </h:column>
+            </h:dataTable>
+
+            <h:dataTable id="orcamentoDT"
+                         value="#{orcamentoMB.itens}"
+                         var="item">
+
+                <h:column>
+                    <f:facet name="header">
+                        Produto
+                    </f:facet>
+
+                    <h:outputText value="#{item.produto.descricao}"/>
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">
+                        Quantidade
+                    </f:facet>
+
+                    <h:outputText value="#{item.quantidade}"/>
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">
+                        Preço unitário
+                    </f:facet>
+
+                    <h:outputText value="#{item.produto.preco}"/>
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">
+                        Preço x Quantidade
+                    </f:facet>
+
+                    <h:outputText value="#{item.preco}"/>
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">
+                        Ações 
+                    </f:facet>
+
+                    <h:commandLink value="remover" action="#{orcamentoMB.remover(item)}">
+                        <f:ajax render="@form"/>
+                    </h:commandLink>
+                </h:column>
+            </h:dataTable>
+
+            <h:commandButton value="Gerar orçamento" action="#{orcamentoMB.criar}"/>
+        </h:form>
+    </h:body>
+</html>
+
